@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: alert
+
+server:
+  port: ${SERVER_PORT:10419}
+
+es:
+  host: ${ES_HOST}
+  user: ${ES_USER}
+  password: ${ES_PASSWORD}
+  index-pattern: team1-logs-*
+
+telegram:
+  bot-token: ${TELEGRAM_BOT_TOKEN}
+  chat-id: ${TELEGRAM_CHAT_ID}
