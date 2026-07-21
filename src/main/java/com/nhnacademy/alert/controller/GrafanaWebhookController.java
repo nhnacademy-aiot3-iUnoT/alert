@@ -22,21 +22,23 @@ public class GrafanaWebhookController {
     private final TelegramNotifier telegramNotifier;
 
     @PostMapping("/webhook/grafana-alert")
-    public void handleAlert(@RequestBody GrafanaWebhookPayload payload) {
-        if (payload.alerts() == null) {
-            return;
-        }
-
-        for (GrafanaWebhookPayload.Alert alert : payload.alerts()) {
-            if (!"firing".equals(alert.status())) {
-                continue;
-            }
-
-            String containerName = alert.labels() != null ? alert.labels().get("container_name") : null;
-            Instant from = Instant.parse(alert.startsAt());
-
-            List<LogEntry> entries = logSearchService.searchErrors(containerName, from, Instant.now());
-            telegramNotifier.sendErrorAlert(containerName != null ? containerName : "unknown", entries);
-        }
+    public void handleAlert(@RequestBody String payload) {
+        log.info("Payload: {}", payload);
+//
+//        if (payload.alerts() == null) {
+//            return;
+//        }
+//
+//        for (GrafanaWebhookPayload.Alert alert : payload.alerts()) {
+//            if (!"firing".equals(alert.status())) {
+//                continue;
+//            }
+//
+//            String containerName = alert.labels() != null ? alert.labels().get("container_name") : null;
+//            Instant from = Instant.parse(alert.startsAt());
+//
+//            List<LogEntry> entries = logSearchService.searchErrors(containerName, from, Instant.now());
+//            telegramNotifier.sendErrorAlert(containerName != null ? containerName : "unknown", entries);
+//        }
     }
 }
