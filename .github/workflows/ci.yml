@@ -27,6 +27,12 @@ jobs:
 
       - name: 빌드 및 테스트
         run: ./mvnw -B clean verify # clean -> compile -> test -> verify
+        env:
+          ES_HOST: http://localhost:10400
+          ES_USER: test
+          ES_PASSWORD: test
+          TELEGRAM_BOT_TOKEN: token
+          TELEGRAM_CHAT_ID: test
 
       - name: 테스트 리포트 업로드
         if: always()
