@@ -46,8 +46,11 @@ public class LogSearchService {
                     .retrieve()
                     .body(JsonNode.class);
 
+            log.info("ES 에러 로그: {}", response);
+
             return parseHits(response);
         } catch (Exception e) {
+            log.warn("ES 조회 실패: {}", e.getMessage());
             return Optional.empty();
         }
     }
