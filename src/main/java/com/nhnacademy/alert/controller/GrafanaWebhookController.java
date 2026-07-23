@@ -16,6 +16,8 @@ public class GrafanaWebhookController {
 
     @PostMapping("/webhook/grafana-alert")
     public void handleAlert(@RequestBody GrafanaWebhookRequest request) {
+        log.info("ERROR 로그 발생: {}", request);
+
         telegramNotifyUseCase.execute(request.toCommand());
     }
 }
