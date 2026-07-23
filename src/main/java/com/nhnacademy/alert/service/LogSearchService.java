@@ -1,9 +1,9 @@
 package com.nhnacademy.alert.service;
 
 import tools.jackson.databind.JsonNode;
+import com.nhnacademy.alert.config.ElasticsearchProperties;
 import com.nhnacademy.alert.dto.LogEntry;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -20,17 +20,14 @@ public class LogSearchService {
 
     private final RestClient restClient;
     private final String indexPattern;
+    private final String logLevel;
 
-    public LogSearchService(
-            @Value("${es.host}") String esHost,
-            @Value("${es.user}") String esUser,
-            @Value("${es.password}") String esPassword,
-            @Value("${es.index-pattern}") String indexPattern
-    ) {
-        this.indexPattern = indexPattern;
+    public LogSearchService(ElasticsearchProperties properties) {
+        this.indexPattern = properties.indexPattern();
+        this.logLevel = properties.logLevel();
         this.restClient = RestClient.builder()
-                .baseUrl(esHost)
-                .defaultHeaders(headers -> headers.setBasicAuth(esUser, esPassword))
+                .baseUrl(properties.host())
+                .defaultHeaders(headers -> headers.setBasicAuth(properties.user(), properties.password()))
                 .build();
     }
 
@@ -67,14 +64,14 @@ public class LogSearchService {
                   "query": {
                     "bool": {
                       "filter": [
-                        {"match": {"log.level": "ERROR"}},
+                        {"match": {"log.level": "%s"}},
                         {"range": {"@timestamp": {"gte": "%s", "lte": "%s"}}}
                         %s
                       ]
                     }
                   }
                 }
-                """.formatted(MAX_HITS, from, to, containerFilter);
+                """.formatted(MAX_HITS, logLevel, from, to, containerFilter);
     }
 
     private Optional<LogEntry> parseHits(JsonNode response) {

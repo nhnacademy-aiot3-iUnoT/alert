@@ -1,8 +1,8 @@
 package com.nhnacademy.alert.service;
 
+import com.nhnacademy.alert.config.TelegramProperties;
 import com.nhnacademy.alert.dto.LogEntry;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -21,13 +21,10 @@ public class TelegramService {
     private final RestClient restClient;
     private final String chatId;
 
-    public TelegramService(
-            @Value("${telegram.bot-token}") String botToken,
-            @Value("${telegram.chat-id}") String chatId
-    ) {
-        this.chatId = chatId;
+    public TelegramService(TelegramProperties properties) {
+        this.chatId = properties.chatId();
         this.restClient = RestClient.builder()
-                .baseUrl("https://api.telegram.org/bot" + botToken)
+                .baseUrl("https://api.telegram.org/bot" + properties.botToken())
                 .build();
     }
 
