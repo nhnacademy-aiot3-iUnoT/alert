@@ -43,7 +43,7 @@ public class LogSearchService {
                     .retrieve()
                     .body(JsonNode.class);
 
-            log.info("ES 에러 로그: {}", response);
+            log.info("{} ERROR 로그: {}", containerName, response);
 
             return parseHits(response);
         } catch (Exception e) {
