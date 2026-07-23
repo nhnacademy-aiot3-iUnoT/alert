@@ -8,15 +8,15 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 public class LogSearchService {
 
-    private static final int MAX_HITS = 10;
+    private static final int MAX_HITS = 1;
 
     private final RestClient restClient;
     private final String indexPattern;
@@ -34,7 +34,10 @@ public class LogSearchService {
                 .build();
     }
 
-    public List<LogEntry> searchErrors(String containerName, Instant from, Instant to) {
+    public Optional<LogEntry> searchLatestError(String containerName) {
+        Instant to = Instant.now();
+        Instant from = to.minus(Duration.ofMinutes(1));
+
         try {
             JsonNode response = restClient.post()
                     .uri("/{index}/_search", indexPattern)
@@ -45,8 +48,7 @@ public class LogSearchService {
 
             return parseHits(response);
         } catch (Exception e) {
-            log.error("Elasticsearch 로그 조회 실패", e);
-            return List.of();
+            return Optional.empty();
         }
     }
 
@@ -72,21 +74,26 @@ public class LogSearchService {
                 """.formatted(MAX_HITS, from, to, containerFilter);
     }
 
-    private List<LogEntry> parseHits(JsonNode response) {
-        List<LogEntry> entries = new ArrayList<>();
+    private Optional<LogEntry> parseHits(JsonNode response) {
         if (response == null) {
-            return entries;
+            return Optional.empty();
         }
 
-        for (JsonNode hit : response.path("hits").path("hits")) {
-            JsonNode source = hit.path("_source");
-            entries.add(new LogEntry(
-                    source.path("@timestamp").asString(""),
-                    source.path("container").path("name").asString("unknown"),
-                    source.path("log").path("logger").asString(""),
-                    source.path("message").asString("")
-            ));
+        JsonNode hit = response.path("hits").path("hits");
+
+        if (hit.isEmpty()) {
+            return Optional.empty();
         }
-        return entries;
+
+        JsonNode source = hit.get(0).path("_source");
+
+        LogEntry error = new LogEntry(
+                source.path("@timestamp").asString(""),
+                source.path("container").path("name").asString("unknown"),
+                source.path("log").path("logger").asString(""),
+                source.path("message").asString("")
+        );
+
+        return Optional.of(error);
     }
 }
