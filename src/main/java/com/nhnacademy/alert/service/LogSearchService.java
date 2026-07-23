@@ -64,7 +64,7 @@ public class LogSearchService {
                   "query": {
                     "bool": {
                       "filter": [
-                        {"match": {"log.level": "%s"}},
+                        {"match": {"log_level": "%s"}},
                         {"range": {"@timestamp": {"gte": "%s", "lte": "%s"}}}
                         %s
                       ]
@@ -90,8 +90,8 @@ public class LogSearchService {
         LogEntry error = new LogEntry(
                 source.path("@timestamp").asString(""),
                 source.path("container").path("name").asString("unknown"),
-                source.path("log").path("logger").asString(""),
-                source.path("message").asString("")
+                source.path("logger").asString(""),
+                source.path("log_message").asString("")
         );
 
         return Optional.of(error);
