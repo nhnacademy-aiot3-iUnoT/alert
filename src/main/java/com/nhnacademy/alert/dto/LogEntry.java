@@ -1,7 +1,9 @@
 package com.nhnacademy.alert.dto;
 
+import java.time.Instant;
+
 public record LogEntry(
-        String timestamp,
+        Instant timestamp,
         String containerName,
         String logger,
         String message

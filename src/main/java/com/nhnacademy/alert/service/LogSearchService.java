@@ -88,7 +88,7 @@ public class LogSearchService {
         JsonNode source = hit.get(0).path("_source");
 
         LogEntry error = new LogEntry(
-                source.path("@timestamp").asString(""),
+                Instant.parse(source.path("@timestamp").asString()),
                 source.path("container").path("name").asString("unknown"),
                 source.path("logger").asString(""),
                 source.path("log_message").asString("")

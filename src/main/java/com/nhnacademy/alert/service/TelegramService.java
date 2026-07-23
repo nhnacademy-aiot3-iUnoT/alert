@@ -7,16 +7,25 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 @Slf4j
 @Service
 public class TelegramService {
-    private static final String TEMPLATE = """
-        ERROR [%s]
 
-        %s
-        %s
-        %s
-    """;
+    private static final ZoneId KST = ZoneId.of("Asia/Seoul");
+    private static final DateTimeFormatter TIME_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    private static final String TEMPLATE = """
+        ERROR 로그 발생
+
+        서비스: %s
+        시간: %s
+        로거: %s
+        메시지: %s
+        """;
 
     private final RestClient restClient;
     private final String chatId;
@@ -42,7 +51,8 @@ public class TelegramService {
     }
 
     private String formatSingle(String containerName, LogEntry entry) {
-        return String.format(TEMPLATE, containerName, entry.timestamp(), entry.logger(), entry.message());
+        String time = TIME_FORMATTER.format(entry.timestamp().atZone(KST));
+        return String.format(TEMPLATE, containerName, time, entry.logger().strip(), entry.message());
     }
 
     private record TelegramMessage(String chat_id, String text) {}
