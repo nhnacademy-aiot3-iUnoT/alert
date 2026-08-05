@@ -20,9 +20,11 @@ public class TelegramService {
     private final RestClient restClient;
 
     public void sendError(FiringAlertCommand command) {
+        String chatUri = "https://api.telegram.org/bot" + telegramProperties.botToken();
+
         try {
             restClient.post()
-                    .uri("/sendMessage")
+                    .uri(chatUri + "/sendMessage")
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(formatMessage(command))
                     .retrieve()

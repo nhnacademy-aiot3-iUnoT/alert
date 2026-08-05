@@ -6,5 +6,4 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record TelegramProperties(
         String botToken,
         String chatId
-) {
-}
+) {}
