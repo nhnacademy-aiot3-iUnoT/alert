@@ -7,13 +7,10 @@ spring:
 server:
   port: ${SERVER_PORT:10419}
 
-es:
-  host: ${ES_HOST}
-  user: ${ES_USER}
-  password: ${ES_PASSWORD}
-  index-pattern: team1-logs-*
-  log-level: ${ES_LOG_LEVEL:ERROR}
-
 telegram:
   bot-token: ${TELEGRAM_BOT_TOKEN}
   chat-id: ${TELEGRAM_CHAT_ID}
+
+time:
+  format: yyyy-MM-dd HH:mm:ss
+  zone-id: Asia/Seoul
