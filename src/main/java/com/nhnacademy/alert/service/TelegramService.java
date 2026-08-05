@@ -1,6 +1,6 @@
 package com.nhnacademy.alert.service;
 
-import com.nhnacademy.alert.config.TelegramProperties;
+import com.nhnacademy.alert.common.config.TelegramProperties;
 import com.nhnacademy.alert.dto.FiringAlertCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

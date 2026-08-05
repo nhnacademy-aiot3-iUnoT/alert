@@ -1,4 +1,4 @@
-package com.nhnacademy.alert.config;
+package com.nhnacademy.alert.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

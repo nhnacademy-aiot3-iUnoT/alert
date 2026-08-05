@@ -1,4 +1,4 @@
-package com.nhnacademy.alert.config;
+package com.nhnacademy.alert.common.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

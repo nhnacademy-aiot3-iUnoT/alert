@@ -1,6 +1,6 @@
 package com.nhnacademy.alert.usecase;
 
-import com.nhnacademy.alert.common.UseCase;
+import com.nhnacademy.alert.common.annotation.UseCase;
 import com.nhnacademy.alert.dto.FiringAlertCommand;
 import com.nhnacademy.alert.service.TelegramService;
 import lombok.RequiredArgsConstructor;

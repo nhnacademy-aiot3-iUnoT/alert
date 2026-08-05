@@ -1,4 +1,4 @@
-package com.nhnacademy.alert.common;
+package com.nhnacademy.alert.common.annotation;
 
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
