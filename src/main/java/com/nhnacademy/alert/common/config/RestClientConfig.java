@@ -8,7 +8,9 @@ import org.springframework.web.client.RestClient;
 public class RestClientConfig {
 
     @Bean
-    public RestClient restClient() {
-        return RestClient.builder().build();
+    public RestClient telegramRestClient(TelegramProperties telegramProperties) {
+        return RestClient.builder()
+                .baseUrl("https://api.telegram.org/bot" + telegramProperties.botToken())
+                .build();
     }
 }

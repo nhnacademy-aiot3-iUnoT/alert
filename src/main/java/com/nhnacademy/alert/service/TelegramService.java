@@ -17,14 +17,12 @@ public class TelegramService {
 
     private final DateTimeFormatter formatter;
     private final TelegramProperties telegramProperties;
-    private final RestClient restClient;
+    private final RestClient telegramRestClient;
 
     public void sendError(FiringAlertCommand command) {
-        String chatUri = "https://api.telegram.org/bot" + telegramProperties.botToken();
-
         try {
-            restClient.post()
-                    .uri(chatUri + "/sendMessage")
+            telegramRestClient.post()
+                    .uri("/sendMessage")
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(formatMessage(command))
                     .retrieve()
