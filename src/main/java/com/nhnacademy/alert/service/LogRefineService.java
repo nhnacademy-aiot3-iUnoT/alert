@@ -25,7 +25,7 @@ public class LogRefineService {
         boolean hasStackTrace = newlineIndex != -1;
 
         String message = (hasStackTrace) ? logMessage.substring(0, newlineIndex) : logMessage;
-        String fullStackTrace = (hasStackTrace) ? logMessage.substring(newlineIndex + 2) : "";
+        String fullStackTrace = (hasStackTrace) ? logMessage.substring(newlineIndex + 1).stripLeading() : "";
         String refinedStackTrace = extractRelevantStackTrace(fullStackTrace);
         String formattedTime = formatter.format(command.logTimestamp());
 
