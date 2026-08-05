@@ -1,7 +1,7 @@
 package com.nhnacademy.alert.service;
 
 import com.nhnacademy.alert.common.config.TelegramProperties;
-import com.nhnacademy.alert.dto.FiringAlertCommand;
+import com.nhnacademy.alert.dto.LogEntry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -19,12 +19,12 @@ public class TelegramService {
     private final TelegramProperties telegramProperties;
     private final RestClient telegramRestClient;
 
-    public void sendError(FiringAlertCommand command) {
+    public void sendError(LogEntry logEntry, String summary) {
         try {
             telegramRestClient.post()
                     .uri("/sendMessage")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(formatMessage(command))
+                    .body(formatMessage(logEntry, summary))
                     .retrieve()
                     .toBodilessEntity();
         } catch (Exception e) {
@@ -32,19 +32,41 @@ public class TelegramService {
         }
     }
 
-    private TelegramMessage formatMessage(FiringAlertCommand command) {
+    private TelegramMessage formatMessage(LogEntry logEntry, String summary) {
+        String aiSection = (summary == null || summary.isBlank()) ? "" : """
+        
+        <b>[AI 분석]</b>
+        %s
+        """.formatted(escapeHtml(summary));
+
         String template = """
-        [ERROR] %s
+        <b>[ERROR] %s</b>
+        
+        %s
+        
         %s
         %s
+        
+        <pre><code class=language-java>
+        %s
+        </code></pre>
         """;
 
-        String formattedTime = formatter.format(command.logTimestamp());
+        String message = String.format(template,
+                escapeHtml(logEntry.containerName()),
+                logEntry.timestamp(),
+                escapeHtml(logEntry.message()),
+                aiSection,
+                escapeHtml(logEntry.stackTrace()));
 
-        String message = String.format(template, command.containerName(), formattedTime, command.logMessage());
-
-        return new TelegramMessage(telegramProperties.chatId(), message);
+        return new TelegramMessage(telegramProperties.chatId(), message, "HTML");
     }
 
-    private record TelegramMessage(String chat_id, String text) {}
+    private String escapeHtml(String text) {
+        return text.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;");
+    }
+
+    private record TelegramMessage(String chat_id, String text, String parse_mode) {}
 }

@@ -2,7 +2,7 @@ package com.nhnacademy.alert.dto;
 
 import java.time.Instant;
 
-public record FiringAlertCommand(
+public record ErrorLogCommand(
         Instant logTimestamp,
         String logLevel,
         String logMessage,

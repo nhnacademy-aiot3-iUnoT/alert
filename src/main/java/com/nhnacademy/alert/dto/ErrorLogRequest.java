@@ -24,7 +24,7 @@ public record ErrorLogRequest(
 ) {
     public record Container(String name) {}
 
-    public FiringAlertCommand toCommand() {
-        return new FiringAlertCommand(logTimestamp, logLevel, logMessage, traceId, spanId, container.name());
+    public ErrorLogCommand toCommand() {
+        return new ErrorLogCommand(logTimestamp, logLevel, logMessage, traceId, spanId, container.name());
     }
 }
