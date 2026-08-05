@@ -24,11 +24,16 @@ public class LogSummaryService {
             return "";
         }
 
-        return chatClientBuilder.build()
-                .prompt()
-                .system(PROMPT)
-                .user(String.valueOf(logEntry))
-                .call()
-                .content();
+        try {
+            return chatClientBuilder.build()
+                    .prompt()
+                    .system(PROMPT)
+                    .user(String.valueOf(logEntry))
+                    .call()
+                    .content();
+        } catch (Exception e) {
+            log.warn("AI 요약 실패", e);
+            return "";
+        }
     }
 }
