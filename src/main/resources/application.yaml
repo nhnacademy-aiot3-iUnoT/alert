@@ -20,3 +20,6 @@ telegram:
 time:
   format: yyyy-MM-dd HH:mm:ss
   zone-id: Asia/Seoul
+
+zipkin:
+  base-url: https://zipkin.iunot.cloud

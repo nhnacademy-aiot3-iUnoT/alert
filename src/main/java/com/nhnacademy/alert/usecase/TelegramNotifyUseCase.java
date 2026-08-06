@@ -33,7 +33,7 @@ public class TelegramNotifyUseCase {
 
             log.info("로그 AI 요약: {}", summary);
 
-            telegramService.sendError(logEntry, summary);
+            telegramService.sendError(logEntry, summary, command.traceId());
         }
     }
 }
