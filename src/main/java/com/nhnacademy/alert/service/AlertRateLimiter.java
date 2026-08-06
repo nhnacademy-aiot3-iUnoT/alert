@@ -9,7 +9,7 @@ import java.time.Duration;
 @Service
 public class AlertRateLimiter {
     private final Cache<String, Boolean> recentAlerts = Caffeine.newBuilder()
-            .expireAfterWrite(Duration.ofMinutes(5))
+            .expireAfterWrite(Duration.ofMinutes(60))
             .build();
 
     public boolean shouldNotify(String containerName, String message) {
