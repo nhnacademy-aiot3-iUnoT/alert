@@ -20,7 +20,7 @@ public class LogSummaryService {
 
     public String summarize(LogEntry logEntry) {
         // 로그가 없거나 스택 트레이스가 없는 경우 AI 분석을 하지 않음
-        if (logEntry == null || logEntry.stackTrace().isBlank()) {
+        if (logEntry == null || logEntry.stackTrace() == null || logEntry.stackTrace().isBlank()) {
             return "";
         }
 
