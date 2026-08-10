@@ -42,7 +42,7 @@ class LogRefineServiceTest {
     }
 
     @Test
-    @DisplayName("스태트레이스가 있으면 예외 첫 줄과 com.nhnacademy 프레임만 추출한다.")
+    @DisplayName("스택트레이스가 있으면 예외 첫 줄과 com.nhnacademy 프레임만 추출한다.")
     void refineLog_WhenStackTraceExists_ExtractsRelevantFrames() {
         // given
         String logMessage = """
