@@ -9,13 +9,10 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.time.format.DateTimeFormatter;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class TelegramService {
-    private final DateTimeFormatter formatter;
     private final TelegramProperties telegramProperties;
     private final ZipkinProperties zipkinProperties;
     private final RestClient telegramRestClient;

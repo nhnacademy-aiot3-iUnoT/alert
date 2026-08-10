@@ -25,9 +25,6 @@ import static org.mockito.BDDMockito.then;
 class TelegramServiceTest {
 
     @Mock
-    private DateTimeFormatter formatter;
-
-    @Mock
     private RestClient telegramRestClient;
 
     @Mock
@@ -46,7 +43,7 @@ class TelegramServiceTest {
         TelegramProperties telegramProperties = new TelegramProperties("bot-token", "12345");
         ZipkinProperties zipkinProperties = new ZipkinProperties("https://zipkin.iunot.cloud");
 
-        telegramService = new TelegramService(formatter, telegramProperties, zipkinProperties, telegramRestClient);
+        telegramService = new TelegramService(telegramProperties, zipkinProperties, telegramRestClient);
     }
 
     @Test
