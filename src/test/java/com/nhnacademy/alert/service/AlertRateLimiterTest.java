@@ -59,4 +59,40 @@ class AlertRateLimiterTest {
         assertThat(result2)
                 .isTrue();
     }
+
+    @Test
+    @DisplayName("타임스탬프와 식별자만 다른 로그는 같은 장애로 보고 false를 반환한다.")
+    void shouldNotify_WhenOnlyVolatileValuesDiffer_ReturnsFalse() {
+        // given
+        String containerName = "team1-front-2";
+        String first = "게이트웨이 응답을 해석할 수 없음: status=503, body={\"timestamp\":\"2026-09-07T09:07:11.697Z\","
+                + "\"path\":\"/api/core/assistant/notes/9/read\",\"requestId\":\"045c28cd-59723\"}";
+        String second = "게이트웨이 응답을 해석할 수 없음: status=503, body={\"timestamp\":\"2026-09-07T09:31:02.114Z\","
+                + "\"path\":\"/api/core/assistant/notes/17/read\",\"requestId\":\"9f31ab04-88210\"}";
+
+        alertRateLimiter.shouldNotify(containerName, first);
+
+        // when
+        boolean result = alertRateLimiter.shouldNotify(containerName, second);
+
+        // then
+        assertThat(result)
+                .isFalse();
+    }
+
+    @Test
+    @DisplayName("상태 코드가 다르면 다른 장애로 보고 true를 반환한다.")
+    void shouldNotify_WhenStatusCodeDiffers_ReturnsTrue() {
+        // given
+        String containerName = "team1-front-2";
+
+        alertRateLimiter.shouldNotify(containerName, "게이트웨이 요청 실패: status=503");
+
+        // when
+        boolean result = alertRateLimiter.shouldNotify(containerName, "게이트웨이 요청 실패: status=500");
+
+        // then
+        assertThat(result)
+                .isTrue();
+    }
 }
