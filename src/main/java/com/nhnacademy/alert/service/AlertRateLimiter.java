@@ -12,10 +12,11 @@ public class AlertRateLimiter {
 
     private static final int MAX_ENTRIES = 10_000;
 
-    // ISO 타임스탬프, requestId(UUID), 경로의 식별자(/storages/2)를 정규화해서 중복 억제
+    // ISO 타임스탬프, 게이트웨이 requestId, UUID, 경로의 식별자(/storages/2)를 정규화해서 중복 억제
     private static final String VOLATILE_PATTERN = """
         \\d{4}-\\d{2}-\\d{2}[T\\s]\\d{2}:\\d{2}:\\d{2}[.,]?\\d*Z?
-        |[0-9a-fA-F]{8}-[0-9a-fA-F-]{4,}
+        |(?<="requestId":")[^"]*
+        |[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}
         |(?<=/)\\d+(?=[/"?\\s]|$)
         """;
 

@@ -95,4 +95,24 @@ class AlertRateLimiterTest {
         assertThat(result)
                 .isTrue();
     }
+
+    @Test
+    @DisplayName("requestId 의 자릿수가 달라도 같은 장애로 보고 false를 반환한다.")
+    void shouldNotify_WhenRequestIdLengthDiffers_ReturnsFalse() {
+        // given
+        String containerName = "team1-front-1";
+        String first = "게이트웨이 통신 에러: status=503, body={\"timestamp\":\"2026-09-08T02:04:26.144Z\","
+                + "\"path\":\"/api/core/assistant/notes\",\"requestId\":\"c2b72284-711\"}";
+        String second = "게이트웨이 통신 에러: status=503, body={\"timestamp\":\"2026-09-08T02:04:25.241Z\","
+                + "\"path\":\"/api/core/assistant/notes\",\"requestId\":\"76c77b89-710\"}";
+
+        alertRateLimiter.shouldNotify(containerName, first);
+
+        // when
+        boolean result = alertRateLimiter.shouldNotify(containerName, second);
+
+        // then
+        assertThat(result)
+                .isFalse();
+    }
 }
